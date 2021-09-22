@@ -1,14 +1,14 @@
 resource "aws_vpc" "this" {
-  count = var.create_vpc ? 1 : 0
+  count = var.vpc_create ? 1 : 0
 
-  cidr_block                       = var.cidr
-  instance_tenancy                 = var.instance_tenancy
+  cidr_block                       = var.vpc_cidr
+  instance_tenancy                 = var.vpc_ins_tenancy
 
 
   tags = merge(
     {
-      "Name" = format("%s", var.name)
+      "Name" = format("%s", var.vpc_name)
     },
-    var.tags,
+    var.vpc_tags,
   )
 }
