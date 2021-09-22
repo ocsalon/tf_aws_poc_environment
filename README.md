@@ -1,1 +1,0 @@
-# tf_aws_poc_environment
