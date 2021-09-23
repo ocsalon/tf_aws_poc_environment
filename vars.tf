@@ -159,3 +159,112 @@ variable "sg_to_port" {
 variable "sg_cidr" {
   type = list(string)
 }
+
+// Placement group Variables
+variable "plg_name" {
+  type        = string
+}
+
+variable "plg_strategy" {
+  type        = string
+}
+
+// ASG Security Group Variables
+variable "asg_sg_name" {
+  type = string
+}
+
+variable "asg_sg_description" {
+  type = string
+}
+
+variable "asg_sg_rl_description" {
+  type = string
+}
+
+variable "asg_sg_type" {
+  type = string
+}
+
+variable "asg_sg_protocol" {
+  type = string
+}
+
+variable "asg_sg_from_port" {
+  type = number
+}
+
+variable "asg_sg_to_port" {
+  type = number
+}
+
+variable "asg_sg_cidr" {
+  type = list(string)
+  default = []
+}
+// AutoScaling group variables
+
+variable "asg_desired_cap" {
+  type        = number
+}
+
+variable "asg_min_size" {
+  type        = number
+}
+
+variable "asg_max_size" {
+  type        = number
+}
+
+variable "lt_version" {
+    type = string
+    default = "$Latest"
+}
+
+// Launch Template variables
+variable "lt_name" {
+    type = string
+}
+
+variable "lt_blk_dev_name" {
+    type = string
+}
+
+variable "lt_blk_vol_size" {
+    type = number
+}
+
+variable "lt_ami_id" {
+    type = string
+}
+
+variable "lt_shutdown_behav" {
+    type = string
+}
+
+variable "lt_instance_type" {
+  type = string
+}
+
+variable "lt_az" {
+  type = string
+}
+
+variable "lt_sgs" {
+  type        = list(string)
+  default     = []
+}
+
+variable "tag_resource_type" {
+  type = string
+}
+
+variable "tag_name" {
+    type = string
+}
+
+// Key pair vars
+variable "key_name" {
+    type = string
+}
+  
