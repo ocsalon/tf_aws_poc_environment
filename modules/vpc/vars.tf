@@ -27,3 +27,20 @@ variable "vpc_ins_tenancy" {
   type        = string
   default     = "default"
 }
+
+variable "create_igw" {
+ type = bool
+ default = false  
+}
+
+variable "rtt_cidr" {
+  description = "The CIDR block for the Route Table that allows internet connectivity"
+  type        = string
+  default     = "0.0.0.0/0"
+}
+
+variable "public_subnet_ids" {
+  description = "A list of subnets inside the VPC"
+  type        = list(string)
+  default     = []
+}
