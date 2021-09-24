@@ -234,10 +234,6 @@ variable "lt_blk_vol_size" {
     type = number
 }
 
-variable "lt_ami_id" {
-    type = string
-}
-
 variable "lt_shutdown_behav" {
     type = string
 }
@@ -268,3 +264,55 @@ variable "key_name" {
     type = string
 }
   
+
+ // Standalone EC2 instance security group 
+variable "ec2_sg_name" {
+  type = string
+}
+
+variable "ec2_sg_description" {
+  type = string
+}
+
+variable "ec2_sg_rl_description" {
+  type = string
+}
+
+variable "ec2_sg_type" {
+  type = string
+}
+
+variable "ec2_sg_protocol" {
+  type = string
+}
+
+variable "ec2_sg_from_port" {
+  type = number
+}
+
+variable "ec2_sg_to_port" {
+  type = number
+}
+
+variable "ec2_sg_cidr" {
+  type = list(string)
+  default = []
+}
+
+// standalone EC2 instance
+
+  variable "ec2_inst_type" {
+    type = string
+  }
+
+    variable "ec2_vol_size" {
+      type = string
+    }
+    
+  variable "ec2_name_tag"{
+      type = string
+  }
+
+  variable "ec2_key_name" {
+    type = string
+  }

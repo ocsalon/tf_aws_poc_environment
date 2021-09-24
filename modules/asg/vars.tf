@@ -81,3 +81,6 @@ variable "key_name" {
     type = string
 }
   
+variable "alb_tg_arns" {
+  type = list(string)
+}
