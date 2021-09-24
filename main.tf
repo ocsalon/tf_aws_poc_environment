@@ -150,7 +150,7 @@ module "ec2-sg-rule" {
 // create standalone ec2 instance
 module "ec2" {
   source = "./modules/ec2"
-  ec2_sn_id = module.public_subnets.subnet_id[1]
+  ec2_sn_id = module.public_subnets.subnet_id[0]
   ec2_sg_ids = [module.ec2-sg.sg_id]
   ec2_ami_id =  data.aws_ami.rhel.id
   ec2_inst_type = var.ec2_inst_type
@@ -159,3 +159,19 @@ module "ec2" {
   ec2_key_name = var.ec2_key_name
   }
 
+module "s3-bucket" {
+  source = "./modules/s3"
+  bucket_name = var.bucket_name
+  acl = var.acl
+  // logs lifecycle rule
+  lg_id = var.lg_id
+  lg_enabled = var.lg_enabled
+  lg_prefix =  var.lg_prefix
+  lg_expir_days = var.lg_expir_days
+  // imaages lifecycle rule
+  im_id = var.im_id
+  im_enabled = var.im_enabled
+  im_prefix=var.im_prefix
+  im_trans_days = var.im_trans_days
+  im_storage_class = var.im_storage_class
+}
