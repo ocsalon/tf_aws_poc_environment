@@ -8,7 +8,7 @@ resource "aws_autoscaling_group" "this" {
   desired_capacity   = var.asg_desired_cap
   max_size           = var.asg_max_size
   min_size           = var.asg_min_size
-
+  target_group_arns  = var.alb_tg_arns
   launch_template {
     id      = aws_launch_template.this.id
     version = var.lt_version

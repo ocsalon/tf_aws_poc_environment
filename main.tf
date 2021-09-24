@@ -65,6 +65,23 @@ module "alb" {
   lst_dft_type  = var.lst_dft_type 
 }
 
+// Retrieve latest RHEL AMI
+data "aws_ami" "rhel" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["RHEL_HA-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["309956199498"] # Canonical
+}
+
 // create ASG instance security group
 module "asg-sg" {
   source                  = "./modules/sg"
@@ -72,6 +89,7 @@ module "asg-sg" {
   sg_description          = var.asg_sg_description
   sg_vpc_id               = module.vpc.vpc_id[0]
 }
+
 // create sg rule
 module "asg-sg-rule" {
   source = "./modules/sg_rule"
@@ -84,11 +102,13 @@ module "asg-sg-rule" {
   sg_cidr = var.asg_sg_cidr
 }
 
+// create autoscaling group
 module "asg" {
   source = "./modules/asg"
   plg_name = var.plg_name
   plg_strategy = var.plg_strategy
   asg_sn_id = [module.private_subnets.subnet_id[1]]
+  alb_tg_arns = [module.alb.tg_arns]
   asg_desired_cap = var.asg_desired_cap
   asg_min_size = var.asg_min_size
   asg_max_size = var.asg_max_size
@@ -96,7 +116,7 @@ module "asg" {
   lt_name = var.lt_name
   lt_blk_dev_name = var.lt_blk_dev_name
   lt_blk_vol_size = var.lt_blk_vol_size
-  lt_ami_id = var.lt_ami_id
+  lt_ami_id = data.aws_ami.rhel.id
   lt_shutdown_behav = var.lt_shutdown_behav
   lt_instance_type = var.lt_instance_type
   lt_az = var.lt_az
@@ -105,3 +125,37 @@ module "asg" {
   tag_name = var.tag_name
   key_name = var.key_name
 }
+
+
+// create Standalone ec2 security group
+module "ec2-sg" {
+  source                  = "./modules/sg"
+  sg_name                 = var.ec2_sg_name
+  sg_description          = var.ec2_sg_description
+  sg_vpc_id               = module.vpc.vpc_id[0]
+}
+
+// create standalone ec2 sg rule
+module "ec2-sg-rule" {
+  source = "./modules/sg_rule"
+  sg_id = module.ec2-sg.sg_id
+  sg_rl_description = var.ec2_sg_rl_description 
+  sg_type = var.ec2_sg_type
+  sg_protocol =  var.ec2_sg_protocol
+  sg_from_port = var.ec2_sg_from_port 
+  sg_to_port = var.ec2_sg_to_port 
+  sg_cidr = var.ec2_sg_cidr
+} 
+
+// create standalone ec2 instance
+module "ec2" {
+  source = "./modules/ec2"
+  ec2_sn_id = module.public_subnets.subnet_id[1]
+  ec2_sg_ids = [module.ec2-sg.sg_id]
+  ec2_ami_id =  data.aws_ami.rhel.id
+  ec2_inst_type = var.ec2_inst_type
+  ec2_vol_size = var.ec2_vol_size
+  ec2_name_tag = var.ec2_name_tag
+  ec2_key_name = var.ec2_key_name
+  }
+
